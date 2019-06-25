@@ -227,11 +227,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            pps.postDelimiterBackspace = postDelimiter;
 	        } else {
 	            pps.postDelimiterBackspace = false;
-	        }
+			}
+			if(charCode === 8){
+				this.onInput(this.element.value,true);
+			}
 	    },
 
 	    onChange: function () {
-	        this.onInput(this.element.value);
+	        this.onInput(this.element.value,false);
 	    },
 
 	    onFocus: function () {
@@ -244,7 +247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    onCut: function (e) {
 	        if (!Cleave.Util.checkFullSelection(this.element.value)) return;
 	        this.copyClipboardData(e);
-	        this.onInput('');
+	        this.onInput('',false);
 	    },
 
 	    onCopy: function (e) {
@@ -278,7 +281,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },
 
-	    onInput: function (value) {
+	    onInput: function (value,backspace) {
 	        var owner = this, pps = owner.properties,
 	            Util = Cleave.Util;
 
@@ -320,7 +323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // date
 	        if (pps.date) {
-	            value = pps.dateFormatter.getValidatedDate(value);
+	            value = pps.dateFormatter.getValidatedDate(value,backspace);
 	        }
 
 	        // time
@@ -709,50 +712,59 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.blocks;
 	    },
 
-	    getValidatedDate: function (value) {
-	        var owner = this, result = '';
-
-	        value = value.replace(/[^\d]/g, '');
-
-	        owner.blocks.forEach(function (length, index) {
-	            if (value.length > 0) {
-	                var sub = value.slice(0, length),
-	                    sub0 = sub.slice(0, 1),
-	                    rest = value.slice(length);
-
-	                switch (owner.datePattern[index]) {
-	                case 'd':
-	                    if (sub === '00') {
-	                        sub = '01';
-	                    } else if (parseInt(sub0, 10) > 3) {
-	                        sub = '0' + sub0;
-	                    } else if (parseInt(sub, 10) > 31) {
-	                        sub = '31';
-	                    }
-
-	                    break;
-
-	                case 'm':
-	                    if (sub === '00') {
-	                        sub = '01';
-	                    } else if (parseInt(sub0, 10) > 1) {
-	                        sub = '0' + sub0;
-	                    } else if (parseInt(sub, 10) > 12) {
-	                        sub = '12';
-	                    }
-
-	                    break;
-	                }
-
-	                result += sub;
-
-	                // update remaining string
-	                value = rest;
-	            }
-	        });
-
-	        return this.getFixedDateString(result);
-	    },
+		getValidatedDate: function (value,backspace) {
+			var owner = this, result = '';
+	
+			value = value.replace(/[^\d]/g, '');
+	
+			owner.blocks.forEach(function (length, index) {
+				if (value.length > 0) {
+					var sub = value.slice(0, length),
+						sub0 = sub.slice(0, 1),
+						rest = value.slice(length);
+					switch (owner.datePattern[index]) {
+					case 'd':
+						if (sub === '00') {
+							sub = '01';
+						} else if (parseInt(sub0, 10) > 3) {
+							sub = '0' + sub0;
+						} else if (parseInt(sub, 10) > 31) {
+							sub = sub;
+						}
+	
+						break;
+	
+					case 'm':
+						if (sub === '00') {
+							sub = '01';
+						} else if (parseInt(sub0, 10) > 1) {
+							sub = '0' + sub0;
+						} else if (parseInt(sub, 10) > 12) {
+							sub = sub;
+						}
+	
+						break;
+					}
+					console.log('sub 1');
+					console.log(sub);
+					console.log('sub0 1');
+					console.log(sub0);
+					console.log('rest 1');
+					console.log(rest);
+					result += sub;
+	
+					// update remaining string
+					value = rest;
+				}
+				if(backspace){
+					result = value;
+				}
+			});
+	
+			console.log('inside getValidatedDate');
+			console.log(result);
+			return this.getFixedDateString(result);
+		},
 
 	    getFixedDateString: function (value) {
 	        var owner = this, datePattern = owner.datePattern, date = [],
