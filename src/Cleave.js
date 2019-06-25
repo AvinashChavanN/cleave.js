@@ -92,7 +92,7 @@ DateFormatter.prototype = {
         return this.blocks;
     },
 
-    getValidatedDate: function (value) {
+    getValidatedDate: function (value,backspace) {
         var owner = this, result = '';
 
         value = value.replace(/[^\d]/g, '');
@@ -141,6 +141,9 @@ DateFormatter.prototype = {
 
                 // update remaining string
                 value = rest;
+            }
+            if(backspace){
+                result = value;
             }
         });
 
@@ -426,10 +429,13 @@ Cleave.prototype = {
         } else {
             pps.postDelimiterBackspace = false;
         }
+        if(charCode === 8){
+            this.onInput(this.element.value,true);
+        }
     },
 
     onChange: function () {
-        this.onInput(this.element.value);
+        this.onInput(this.element.value,false);
     },
 
     onFocus: function () {
@@ -442,7 +448,7 @@ Cleave.prototype = {
     onCut: function (e) {
         if (!Cleave.Util.checkFullSelection(this.element.value)) return;
         this.copyClipboardData(e);
-        this.onInput('');
+        this.onInput('',false);
     },
 
     onCopy: function (e) {
@@ -476,7 +482,7 @@ Cleave.prototype = {
         }
     },
 
-    onInput: function (value) {
+    onInput: function (value,backspace) {
         var owner = this, pps = owner.properties,
             Util = Cleave.Util;
 
@@ -518,7 +524,7 @@ Cleave.prototype = {
 
         // date
         if (pps.date) {
-            value = pps.dateFormatter.getValidatedDate(value);
+            value = pps.dateFormatter.getValidatedDate(value,backspace);
         }
 
         // time
@@ -727,3 +733,4 @@ Cleave.DefaultProperties = require('../src/common/DefaultProperties');
 
 // CommonJS
 module.exports = Cleave;
+
