@@ -10,7 +10,11 @@ var Util = {
 
     getPostDelimiter: function (value, delimiter, delimiters) {
         // single delimiter
+        console.log('inside getPostDelimiter');
+        console.log(value, delimiter, delimiters);
         if (delimiters.length === 0) {
+            console.log('single delimiter');
+            console.log(value.slice(-delimiter.length) === delimiter ? delimiter : '');
             return value.slice(-delimiter.length) === delimiter ? delimiter : '';
         }
 
@@ -22,6 +26,8 @@ var Util = {
             }
         });
 
+        console.log('single delimiter');
+        console.log(matchedDelimiter);
         return matchedDelimiter;
     },
 
