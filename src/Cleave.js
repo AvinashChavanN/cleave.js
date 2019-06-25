@@ -380,7 +380,7 @@ Cleave.prototype = {
             return;
         }
 
-        pps.dateFormatter = new Cleave.DateFormatter(pps.datePattern, pps.dateMin, pps.dateMax);
+        pps.dateFormatter = new DateFormatter(pps.datePattern, pps.dateMin, pps.dateMax);
         pps.blocks = pps.dateFormatter.getBlocks();
         pps.blocksLength = pps.blocks.length;
         pps.maxLength = Cleave.Util.getMaxLength(pps.blocks);
@@ -721,7 +721,6 @@ Cleave.prototype = {
 };
 
 Cleave.NumeralFormatter = require('../src/shortcuts/NumeralFormatter');
-Cleave.DateFormatter = require('../src/shortcuts/DateFormatter');
 Cleave.TimeFormatter = require('../src/shortcuts/TimeFormatter');
 Cleave.PhoneFormatter = require('../src/shortcuts/PhoneFormatter');
 Cleave.CreditCardDetector = require('../src/shortcuts/CreditCardDetector');
