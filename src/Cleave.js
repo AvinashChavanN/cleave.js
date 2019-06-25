@@ -102,12 +102,6 @@ DateFormatter.prototype = {
                 var sub = value.slice(0, length),
                     sub0 = sub.slice(0, 1),
                     rest = value.slice(length);
-                console.log('sub');
-                console.log(sub);
-                console.log('sub0');
-                console.log(sub0);
-                console.log('rest');
-                console.log(rest);
                 switch (owner.datePattern[index]) {
                 case 'd':
                     if (sub === '00') {
@@ -115,7 +109,7 @@ DateFormatter.prototype = {
                     } else if (parseInt(sub0, 10) > 3) {
                         sub = '0' + sub0;
                     } else if (parseInt(sub, 10) > 31) {
-                        sub = '31';
+                        sub = sub;
                     }
 
                     break;
@@ -126,7 +120,7 @@ DateFormatter.prototype = {
                     } else if (parseInt(sub0, 10) > 1) {
                         sub = '0' + sub0;
                     } else if (parseInt(sub, 10) > 12) {
-                        sub = '12';
+                        sub = sub;
                     }
 
                     break;
